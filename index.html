@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#07111c">
+  <title>CipherLab — Cryptographic Observatory</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/simulator.css">
+</head>
+<body>
+  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+  <header class="topbar">
+    <a class="brand" href="#home" aria-label="CipherLab home"><span class="brand-mark">C</span><span>CIPHER<span class="brand-light">LAB</span><small>CRYPTOGRAPHIC OBSERVATORY</small></span></a>
+    <nav class="nav-links"><a href="#home" class="active">Overview</a><a href="#workbench">Workbench</a><a href="#how">How it works</a></nav>
+    <div class="top-status"><span class="pulse-dot"></span> ENGINE READY</div>
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation">☰</button>
+  </header>
+
+  <main>
+    <section class="hero section-wrap" id="home">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="eyebrow-line"></span> INTERACTIVE CRYPTOGRAPHY EXPERIENCE</div>
+        <h1>EVERY BIT<br>HAS A <em>SECRET.</em></h1>
+        <p class="hero-description">Step inside the machinery of <strong>ChaCha20</strong>. Watch a message become bytes, travel through twenty rounds of transformation, and emerge as ciphertext.</p>
+        <div class="hero-actions"><a class="button button-primary" href="#workbench">Enter the laboratory <span>↗</span></a><a class="text-link" href="#how">Explore the process <span>↓</span></a></div>
+        <div class="hero-metrics"><div><strong>20</strong><span>ROUNDS</span></div><i></i><div><strong>512</strong><span>STATE BITS</span></div><i></i><div><strong>256</strong><span>KEY BITS</span></div></div>
+      </div>
+      <div class="hero-art" aria-label="Animated cryptographic core">
+        <div class="art-label art-label-top"><span>CORE / 01</span><span>LIVE VISUALIZATION</span></div>
+        <div class="orbit orbit-a"></div><div class="orbit orbit-b"></div><div class="orbit orbit-c"></div>
+        <div class="core-glow"></div><div class="core-object"><div class="core-inner">C<span>20</span></div></div>
+        <div class="orbit-node node-a"></div><div class="orbit-node node-b"></div><div class="orbit-node node-c"></div>
+        <div class="floating-code code-a">0x61707865</div><div class="floating-code code-b">XOR / ROTL</div><div class="floating-code code-c">20 ROUNDS</div>
+        <div class="art-label art-label-bottom"><span>STREAM CIPHER</span><span class="cyan-text">● OPERATIONAL</span></div>
+      </div>
+      <div class="hero-bottom-note"><span>01 — THE OBSERVATORY</span><span>SCROLL TO INITIALIZE ↓</span></div>
+    </section>
+
+    <section class="intro-strip section-wrap" id="how">
+      <div class="strip-number">01 / THE IDEA</div>
+      <p>ChaCha20 is a <strong>stream cipher</strong>. It creates a pseudorandom keystream, then combines that stream with your message using XOR. The same keystream reverses the process.</p>
+      <div class="strip-tag">NO MAGIC. JUST MATHEMATICS.</div>
+    </section>
+
+    <section class="workbench section-wrap" id="workbench">
+      <div class="section-heading">
+        <div><div class="eyebrow"><span class="eyebrow-line"></span> 02 / THE WORKBENCH</div><h2>Initialize your <em>message.</em></h2></div>
+        <div class="heading-note">Configure the inputs.<br>Then observe every transformation.</div>
+      </div>
+
+      <div class="workbench-grid">
+        <aside class="control-panel panel">
+          <div class="panel-top"><span>INPUT CONFIGURATION</span><span class="panel-index">A—01</span></div>
+          <label for="messageInput">PLAINTEXT MESSAGE</label>
+          <textarea id="messageInput" rows="4" maxlength="512" placeholder="Type a message worth protecting...">The future is encrypted.</textarea>
+          <div class="field-foot"><span>UTF-8 ENCODING</span><span id="charCount">24 / 512</span></div>
+
+          <div class="field-group">
+            <div class="label-line"><label for="keyInput">SECRET KEY</label><span class="field-hint">32 BYTES / 256 BITS</span></div>
+            <input id="keyInput" type="text" autocomplete="off" spellcheck="false" value="000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f">
+            <div class="field-foot"><span>64 HEX CHARACTERS</span><button class="inline-button" id="randomKeyBtn">↻ GENERATE KEY</button></div>
+          </div>
+
+          <div class="field-group">
+            <div class="label-line"><label for="nonceInput">NONCE</label><span class="field-hint">12 BYTES / 96 BITS</span></div>
+            <input id="nonceInput" type="text" autocomplete="off" spellcheck="false" value="000000090000004a00000000">
+            <div class="field-foot"><span>24 HEX CHARACTERS</span><button class="inline-button" id="randomNonceBtn">↻ GENERATE NONCE</button></div>
+          </div>
+
+          <div class="input-warning"><span>ⓘ</span><p>Use a unique nonce with each message under the same key. This educational demo is not a substitute for authenticated encryption in real applications.</p></div>
+          <button class="button button-primary run-button" id="encryptBtn">Run encryption <span>↗</span></button>
+          <button class="button button-quiet run-button" id="decryptBtn">Decrypt current result <span>↶</span></button>
+          <div class="error-message" id="errorMessage" role="alert"></div>
+        </aside>
+
+        <div class="lab-panel">
+          <div class="state-panel panel">
+            <div class="panel-top"><span>LIVE STATE MATRIX</span><span class="live-indicator"><i></i> <b id="stateStatus">AWAITING INPUT</b></span></div>
+            <div class="state-meta"><span>512-BIT INTERNAL STATE</span><span id="roundLabel">INITIAL STATE</span></div>
+            <div class="state-matrix" id="stateMatrix" aria-label="ChaCha20 state matrix">
+              <div class="state-cell"><small>00</small><strong>61707865</strong><em>CONST</em></div><div class="state-cell"><small>01</small><strong>3320646e</strong><em>CONST</em></div><div class="state-cell"><small>02</small><strong>79622d32</strong><em>CONST</em></div><div class="state-cell"><small>03</small><strong>6b206574</strong><em>CONST</em></div>
+              <div class="state-cell"><small>04</small><strong>00010203</strong><em>KEY</em></div><div class="state-cell"><small>05</small><strong>04050607</strong><em>KEY</em></div><div class="state-cell"><small>06</small><strong>08090a0b</strong><em>KEY</em></div><div class="state-cell"><small>07</small><strong>0c0d0e0f</strong><em>KEY</em></div>
+              <div class="state-cell"><small>08</small><strong>10111213</strong><em>KEY</em></div><div class="state-cell"><small>09</small><strong>14151617</strong><em>KEY</em></div><div class="state-cell"><small>10</small><strong>18191a1b</strong><em>KEY</em></div><div class="state-cell"><small>11</small><strong>1c1d1e1f</strong><em>KEY</em></div>
+              <div class="state-cell"><small>12</small><strong>00000001</strong><em>COUNT</em></div><div class="state-cell"><small>13</small><strong>00000009</strong><em>NONCE</em></div><div class="state-cell"><small>14</small><strong>0000004a</strong><em>NONCE</em></div><div class="state-cell"><small>15</small><strong>00000000</strong><em>NONCE</em></div>
+            </div>
+            <div class="matrix-legend"><span><i class="legend-const"></i> CONSTANT</span><span><i class="legend-key"></i> KEY</span><span><i class="legend-nonce"></i> COUNTER / NONCE</span></div>
+          </div>
+
+          <div class="operation-panel panel">
+            <div class="panel-top"><span>OPERATION MONITOR</span><span class="panel-index">B—02</span></div>
+            <div class="operation-main"><div class="operation-symbol" id="operationSymbol">∑</div><div><div class="operation-name" id="operationName">Ready when you are</div><p id="operationDescription">Your message is waiting at the entrance. Start encryption to see the engine come alive.</p></div></div>
+            <div class="operation-details"><div><span>ACTIVE STEP</span><strong id="stepNumber">—</strong></div><div><span>OPERATION TYPE</span><strong id="stepType">STANDBY</strong></div><div><span>ROUND</span><strong id="stepRound">—</strong></div></div>
+            <div class="quip" id="quip">“The bits are stretching. Give them a second.”</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="simulation-controls panel">
+        <div class="timeline-head"><div><span class="panel-top-label">TRANSFORMATION TIMELINE</span><strong id="timelineProgress">0 <small>/ 20 ROUNDS</small></strong></div><span id="timelineStatus">NOT STARTED</span></div>
+        <div class="timeline-track"><div class="timeline-fill" id="timelineFill"></div></div>
+        <div class="round-markers" id="roundMarkers"></div>
+        <div class="control-actions"><button class="button button-quiet" id="prevStepBtn" disabled>← Previous</button><div class="step-actions"><button class="button button-quiet" id="playBtn" disabled>▶ Auto play</button><button class="button button-primary" id="nextStepBtn" disabled>Next step →</button></div></div>
+        <div class="timeline-caption">Each double round contains one column round and one diagonal round. Select a round marker after encryption to inspect its state.</div>
+      </div>
+
+      <div class="results-grid">
+        <div class="result-card panel"><div class="panel-top"><span>OUTPUT / CIPHERTEXT</span><button class="inline-button" id="copyCipherBtn" disabled>COPY ↗</button></div><div class="result-value" id="cipherOutput">Your encrypted bytes will appear here.</div><div class="result-meta" id="cipherMeta">— BYTES GENERATED</div></div>
+        <div class="result-card panel"><div class="panel-top"><span>RECOVERED / PLAINTEXT</span><button class="inline-button" id="copyPlainBtn" disabled>COPY ↗</button></div><div class="result-value" id="plainOutput">Decryption will restore the original message.</div><div class="result-meta" id="plainMeta">WAITING FOR DECRYPTION</div></div>
+      </div>
+    </section>
+
+    <section class="explain-section section-wrap">
+      <div class="explain-card"><div class="eyebrow"><span class="eyebrow-line"></span> 03 / UNDER THE HOOD</div><h2>Small operations.<br><em>Big transformation.</em></h2><p>ChaCha20 builds a 512-bit state from constants, a 256-bit key, a counter and a 96-bit nonce. Its quarter-round mixes four 32-bit words using addition, XOR and rotation.</p><a href="#workbench" class="text-link">Back to the workbench ↑</a></div>
+      <div class="formula-card panel"><div class="formula-title">THE QUARTER-ROUND RECIPE <span>ARX</span></div><div class="formula-row"><b>01</b><code>a += b</code><span>ADD</span></div><div class="formula-row"><b>02</b><code>d ^= a</code><span>XOR</span></div><div class="formula-row"><b>03</b><code>d &lt;&lt;&lt; 16</code><span>ROTATE</span></div><div class="formula-row"><b>04</b><code>c += d</code><span>ADD</span></div><div class="formula-row"><b>05</b><code>b ^= c</code><span>XOR</span></div><div class="formula-row"><b>06</b><code>b &lt;&lt;&lt; 12</code><span>ROTATE</span></div><div class="formula-row"><b>…</b><code>Repeat the mix</code><span>4 MORE</span></div></div>
+    </section>
+  </main>
+  <footer class="footer section-wrap"><a class="brand" href="#home"><span class="brand-mark">C</span><span>CIPHER<span class="brand-light">LAB</span><small>CRYPTOGRAPHIC OBSERVATORY</small></span></a><span>BUILT TO MAKE THE INVISIBLE VISIBLE.</span><span>CHACha20 / EDUCATIONAL SIMULATOR</span></footer>
+  <script src="js/chacha20.js"></script>
+  <script src="js/simulation.js"></script>
+  <script src="js/visualizer.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
